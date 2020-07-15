@@ -79,12 +79,12 @@ def process_py(self, node):
 	"""
 	Add signature of .py file, so it will be byte-compiled when necessary
 	"""
-	assert(hasattr(self, 'install_path')), 'add features="py" for target "%s" in "%s/wscript".' % (self.target, self.path.nice_path())
+	assert(hasattr(self, 'install_path')), 'add features="py" for target "%s" in "%s/wscript".' % (self.target, self.path.abspath())
 	self.install_from = getattr(self, 'install_from', None)
 	relative_trick = getattr(self, 'relative_trick', True)
 	if self.install_from:
 		assert isinstance(self.install_from, Node.Node), \
-		'add features="py" for target "%s" in "%s/wscript" (%s).' % (self.target, self.path.nice_path(), type(self.install_from))
+		'add features="py" for target "%s" in "%s/wscript" (%s).' % (self.target, self.path.abspath(), type(self.install_from))
 
 	# where to install the python file
 	if self.install_path:
