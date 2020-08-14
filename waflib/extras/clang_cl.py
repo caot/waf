@@ -37,16 +37,20 @@ def get_llvm_paths(self):
 		try:
 			llvm_key = Utils.winreg.OpenKey(Utils.winreg.HKEY_LOCAL_MACHINE,'SOFTWARE\\Wow6432Node\\LLVM\\LLVM')
 		except OSError:
-			llvm_key = Utils.winreg.OpenKey(Utils.winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE\\LLVM\\LLVM')
+			try:
+				llvm_key = Utils.winreg.OpenKey(Utils.winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE\\LLVM\\LLVM')
+			except OSError:
+				llvm_key = None
 
-		llvm_dir, _ = Utils.winreg.QueryValueEx(llvm_key, '')
-		if llvm_dir:
-			llvm_path.append(os.path.join(llvm_dir, 'bin'))
+		if llvm_key:
+			llvm_dir, _ = Utils.winreg.QueryValueEx(llvm_key, '')
+			if llvm_dir:
+				llvm_path.append(os.path.join(llvm_dir, 'bin'))
 
 	tmp = self.environ.get('LLVM_PATH') or self.env.LLVM_PATH
 	if tmp:
 		llvm_path.append(tmp)
-	llvm_path.append(self.env.PATH)
+	llvm_path += self.env.PATH
 	return llvm_path
 
 @conf
