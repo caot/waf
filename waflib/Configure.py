@@ -134,6 +134,8 @@ class ConfigurationContext(Context.Context):
 		self.init_dirs()
 
 		self.cachedir = self.bldnode.make_node(Build.CACHE_DIR)
+		if os.path.exists(self.cachedir.abspath()):
+			shutil.rmtree(self.cachedir.abspath())
 		self.cachedir.mkdir()
 
 		path = os.path.join(self.bldnode.abspath(), WAF_CONFIG_LOG)
